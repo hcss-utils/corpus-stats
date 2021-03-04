@@ -70,5 +70,5 @@ class Corpus:
         years = s.dt.year
         table = years.value_counts().to_frame().reset_index()
         table.columns = ["year", "counts"]
-        table.sort_values("year", ascending=False).reset_index(drop=True)
+        table = table.sort_values("year").reset_index(drop=True)
         return table.plot.bar(x="year", y="counts")
