@@ -1,6 +1,7 @@
 import json
 import pathlib
 import pandas as pd
+import pandas.api.types as ptypes
 
 
 class Corpus:
@@ -60,3 +61,14 @@ class Corpus:
         print("\n")
         print(s.describe())
         return 
+
+    def plot_dist(self, column):
+        self._check_df()
+        s = self.df[column]
+        if not ptypes.is_datetime64_dtype(s):
+            s = pd.to_datetime(s)
+        years = s.dt.year
+        table = years.value_counts().to_frame().reset_index()
+        table.columns = ["year", "counts"]
+        table.sort_values("year", ascending=False).reset_index(drop=True)
+        return table.plot.bar(x="year", y="counts")
